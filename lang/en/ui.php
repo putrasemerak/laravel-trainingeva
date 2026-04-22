@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'login' => 'Login',
+    'logout' => 'Logout',
+    'welcome' => 'Welcome',
+    'dashboard' => 'Dashboard',
+    'evaluations' => 'Evaluations',
+    'admin_dashboard' => 'Admin Dashboard',
+    'my_dashboard' => 'My Dashboard',
+    'audit_trail' => 'Audit Trail',
+    'system_settings' => 'System Settings',
+    'evaluator' => 'Evaluator',
+    'employee_no' => 'Employee No',
+    'password' => 'Password',
+    'remember_me' => 'Remember Me',
+    'search' => 'Search',
+    'create_new' => 'Create New',
+    'status' => 'Status',
+    'action' => 'Action',
+    'ref_num' => 'Ref Num',
+    'name' => 'Name',
+    'topic' => 'Topic',
+    'date_issued' => 'Date Issued',
+    'request_evaluation' => 'Request Evaluation',
+];

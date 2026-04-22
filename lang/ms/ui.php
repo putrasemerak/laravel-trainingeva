@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'login' => 'Login',
+    'logout' => 'Log Keluar',
+    'welcome' => 'Selamat Datang',
+    'dashboard' => 'Papan Pemuka',
+    'evaluations' => 'Penilaian',
+    'admin_dashboard' => 'Papan Pemuka Admin',
+    'my_dashboard' => 'Papan Pemuka Saya',
+    'audit_trail' => 'Jejak Audit',
+    'system_settings' => 'Tetapan Sistem',
+    'evaluator' => 'Penilai',
+    'employee_no' => 'No. Pekerja',
+    'password' => 'Kata Laluan',
+    'remember_me' => 'Ingat Saya',
+    'search' => 'Cari',
+    'create_new' => 'Cipta Baru',
+    'status' => 'Status',
+    'action' => 'Tindakan',
+    'ref_num' => 'No. Rujukan',
+    'name' => 'Nama',
+    'topic' => 'Topik',
+    'date_issued' => 'Tarikh Dikeluarkan',
+    'request_evaluation' => 'Mohon Penilaian',
+];

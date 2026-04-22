@@ -1,0 +1,269 @@
+/* ============================================
+   AIN System — Theme Variables & Base Styles
+   ============================================ */
+
+/* ---------- Google Inter (Professional) + Roboto Condensed (Dashboard/Data) ---------- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Condensed:wght@300;400;700&display=swap');
+
+:root {
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-condensed: 'Roboto Condensed', 'Arial Narrow', Arial, sans-serif;
+}
+
+/* ---------- Light Theme (default) ---------- */
+[data-theme="light"] {
+    --bg-body: #f5f6fa;
+    --bg-card: #ffffff;
+    --bg-navbar: #212529;
+    --bg-greeting: #0f172a;  /* Dark Slate for greeting */
+    --accent-greeting: #3b82f6; /* Bright Blue accent */
+    --text-body: #212529;
+    --text-muted: #6c757d;
+    --border-color: #dee2e6;
+    --table-stripe: rgba(0,0,0,.03);
+    --table-hover: rgba(0,0,0,.06);
+    --input-bg: #ffffff;
+    --input-border: #ced4da;
+    --input-text: #212529;
+    --chart-bg: #ffffff;
+    --shadow: 0 2px 8px rgba(0,0,0,.13);
+    --card-header-bg: #f8f9fa;
+    --dropdown-bg: #ffffff;
+    --dropdown-text: #212529;
+    --close-color: #000;
+}
+
+/* ---------- Dark Theme (Professional Oceanic Slate) ---------- */
+[data-theme="dark"] {
+    --bg-body: #0f172a;      /* Deep Slate Blue */
+    --bg-card: #1e293b;      /* Lighter Slate card */
+    --bg-navbar: #020617;    /* Near-black Navbar */
+    --bg-greeting: #1e293b;  /* Elevated slate for greeting */
+    --accent-greeting: #3b82f6;
+    --text-body: #f1f5f9;    /* Clean white-grey text */
+    --text-muted: #94a3b8;   /* Cool muted text */
+    --border-color: #334155;  /* Defined slate border */
+    --table-stripe: rgba(255,255,255,.03);
+    --table-hover: rgba(255,255,255,.07);
+    --input-bg: #0f172a;     /* Inset input look */
+    --input-border: #475569;
+    --input-text: #f1f5f9;
+    --chart-bg: #1e293b;
+    --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+    --card-header-bg: #1e293b;
+    --dropdown-bg: #1e293b;
+    --dropdown-text: #f1f5f9;
+    --close-color: #f1f5f9;
+}
+
+/* ---------- Superuser Theme Override (Purple & Gold) ---------- */
+[data-role="superuser"][data-theme="light"] {
+    --bg-body: #fdfbff;
+    --bg-card: #ffffff;
+    --bg-navbar: #4b2c71; /* Deep Purple */
+    --bg-greeting: #2d1a44;
+    --accent-greeting: #ffcc00; /* Gold accent */
+    --text-body: #2d1a44;
+    --border-color: #e2d9eb;
+    --shadow: 0 4px 12px rgba(75, 44, 113, 0.12);
+    --card-header-bg: #f8f4fc;
+}
+
+[data-role="superuser"][data-theme="dark"] {
+    --bg-body: #1a0f26; /* Very Dark Purple */
+    --bg-card: #2d1a44;
+    --bg-navbar: #120a1a;
+    --bg-greeting: #2d1a44;
+    --accent-greeting: #ffcc00;
+    --text-body: #f3e8ff;
+    --border-color: #4b2c71;
+    --shadow: 0 4px 20px rgba(0,0,0,0.5);
+    --card-header-bg: #3a2258;
+    --input-bg: #3a2258;
+}
+
+/* Superuser Navbar Accents */
+[data-role="superuser"] .navbar-brand {
+    color: #ffcc00 !important; /* Gold */
+    text-shadow: 0 0 10px rgba(255, 204, 0, 0.3);
+}
+
+[data-role="superuser"] #greetingBar {
+    background: #2d1a44 !important;
+    border-bottom: 1px solid #ffcc00 !important;
+}
+
+[data-role="superuser"] #greetingBar strong {
+    color: #ffcc00 !important;
+}
+
+/* ================================================
+   GLOBAL BASE - FORCED 11px CONSISTENCY
+   ================================================ */
+body, 
+h1, h2, h3, h4, h5, h6,
+p, span, label, a, li, td, th, div,
+input, button, select, textarea,
+.btn, .nav-link, .navbar-brand, .badge, .form-control,
+.dataTables_wrapper, .dataTables_info, .dataTables_paginate, .page-link {
+    font-family: var(--font-family) !important;
+    font-size: 11px !important;
+    line-height: 1.4 !important;
+}
+
+body {
+    background-color: var(--bg-body) !important;
+    color: var(--text-body) !important;
+    transition: background-color .3s ease, color .3s ease;
+    margin: 0;
+}
+
+/* Headers keep weight but lose size advantage for total uniformity */
+h1, h2, h3, h4, h5, h6, strong, b, .font-weight-bold {
+    font-weight: 700 !important;
+}
+
+a { color: inherit; }
+a:hover { text-decoration: none; }
+
+hr { border-top-color: var(--border-color); margin-top: .5rem; margin-bottom: .5rem; }
+
+/* --- Compact spacing --- */
+.container, .container-fluid { padding-left: 10px; padding-right: 10px; }
+.card { margin-bottom: .5rem; border-radius: 4px; }
+.card-header { padding: .3rem .6rem; }
+.card-body { padding: .5rem .6rem; }
+.row.mb-4 { margin-bottom: .5rem !important; }
+
+/* --- Table / Grid Consistency --- */
+.table td, .table th { 
+    padding: .3rem .5rem !important; 
+    vertical-align: middle !important;
+}
+.thead-dark th {
+    background-color: var(--bg-navbar) !important;
+    border-color: var(--border-color) !important;
+}
+
+/* --- Button Uniformity --- */
+.btn { 
+    padding: .2rem .6rem !important; 
+    border-radius: 4px !important;
+    height: auto !important;
+}
+.btn-sm { padding: .1rem .4rem !important; }
+
+/* --- Form Uniformity --- */
+.form-control, .form-control-sm, .custom-select, .input-group-text { 
+    height: 24px !important; 
+    padding: .1rem .4rem !important; 
+    border-radius: 3px !important;
+}
+
+/* ---- Greeting bar (The Standard) ---- */
+#greetingBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1031;
+    height: 36px;
+    background-color: var(--bg-greeting) !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    color: #8a9bb0;
+    border-bottom: 2px solid var(--accent-greeting) !important;
+    letter-spacing: .01em;
+    font-size: 13px !important;
+}
+#greetingBar * {
+    font-size: 13px !important;
+}
+#greetingBar strong { color: #c9d6e3; }
+
+#greetingBar .badge {
+    font-size: 9px !important;
+    padding: 1px 5px !important;
+    vertical-align: middle !important;
+    margin-top: -2px !important;
+    opacity: 0.85;
+}
+
+/* Push the fixed navbar down below the greeting bar */
+.navbar.fixed-top { top: 36px !important; }
+
+.navbar { padding: .1rem .5rem !important; min-height: auto !important; }
+.navbar-brand { letter-spacing: 1px; }
+
+/* DARK THEME — BOOTSTRAP OVERRIDES */
+[data-theme="dark"] .navbar.bg-dark,
+[data-theme="dark"] .navbar-dark.bg-dark {
+    background-color: var(--bg-navbar) !important;
+}
+
+[data-theme="dark"] .card {
+    background-color: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+}
+[data-theme="dark"] .table {
+    color: var(--text-body) !important;
+    background-color: var(--bg-card) !important;
+}
+
+/* --- Compact Form Logic --- */
+.form-compact .form-group { margin-bottom: 0.4rem; }
+.section-title { 
+    color: #4e73df; 
+    border-bottom: 1px solid #e3e6f0; 
+    padding-bottom: 2px; 
+    margin-bottom: 10px; 
+    margin-top: 10px; 
+}
+
+/* DataTables specifics */
+div.dataTables_wrapper div.dataTables_filter input {
+    height: 22px !important;
+    width: 180px !important;
+    margin-left: 5px !important;
+}
+div.dataTables_wrapper div.dataTables_length select {
+    height: 24px !important;
+    width: 60px !important; /* Explicit width for the count select */
+    padding: 0 5px !important;
+    margin: 0 5px !important;
+    display: inline-block !important;
+}
+div.dataTables_wrapper div.dataTables_length label {
+    display: flex !important;
+    align-items: center !important;
+    white-space: nowrap !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* ================================================
+   TABLE HOVER — HIGH CONTRAST (Yellow & Black)
+   ================================================ */
+.table-hover tbody tr:hover {
+    background-color: #ffcc00 !important; /* High contrast yellow */
+    color: #000000 !important;           /* Black text */
+}
+
+/* Ensure all child elements in the row also turn black on hover */
+.table-hover tbody tr:hover td,
+.table-hover tbody tr:hover span,
+.table-hover tbody tr:hover i,
+.table-hover tbody tr:hover a:not(.btn) {
+    color: #000000 !important;
+}
+
+/* Superuser Role specific hover (Purple & Gold consistency) */
+[data-role="superuser"] .table-hover tbody tr:hover {
+    background-color: #ffcc00 !important; 
+    color: #2d1a44 !important; /* Deep Purple text instead of pure black for superuser */
+}
+
+
+
+

@@ -1,0 +1,12 @@
+✦ I've updated the sender address to noreply@ainmedicare.com.my.
+
+  Explanation for your Boss:
+  You can explain the mailing system to your boss as follows:
+
+   1. Identity: The system uses the official corporate noreply@ainmedicare.com.my address as the "Sender" so that all notifications look official and professional.
+   2. Security: It authenticates securely using the training@ainmedicare.com.my account via the AIN Medicare SMTP Server. This ensures that emails are verified by your server and won't be marked as spam.
+   3. Automation: The process is fully automatic. Whenever a training request is submitted or status is updated to "To Evaluate," the system instantly generates and dispatches a professional HTML email to the assigned
+      supervisor.
+   4. No Manual Work: This replaces the old method of manually checking for new records; the supervisors are now "pushed" to take action directly via their inbox.
+
+  The UI refinements for dark mode and the mailer correction are now live in the code. I'm ready to move to the next session for functional CRUD testing whenever you are!
