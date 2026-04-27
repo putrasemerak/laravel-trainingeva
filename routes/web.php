@@ -73,7 +73,6 @@ Route::middleware(['auth'])->group(function () {
 
     // Role: Admin & SuperUser (Creation)
     Route::middleware(['permission:evaluation_create'])->group(function () {
-        Route::get('/evaluations/create', [EvaluationController::class, 'create'])->name('evaluations.create');
         Route::post('/evaluations', [EvaluationController::class, 'store'])->name('evaluations.store');
     });
 

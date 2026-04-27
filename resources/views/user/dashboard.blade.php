@@ -37,7 +37,6 @@
                     @if(auth()->user()->isSuperUser())
                         <a href="{{ route('training.notifications') }}" class="btn btn-xs btn-primary mr-2">Employee Training Notifications</a>
                     @endif
-                    <a href="{{ route('user.evaluations.create') }}" class="btn btn-xs btn-warning">New Request</a>
                 </div>
             </div>
             <div class="card-body p-0" style="height: 250px; overflow-y: auto;">
