@@ -78,9 +78,17 @@ class EvaluationController extends Controller
 
         $evaluations = Evaluation::where('eemp', $user->EmpNo)->get();
 
+        // Calculate Stats
+        $evalStats = [
+            'total_done' => $evaluations->where('status', 'Evaluated')->count(),
+            'highest_mark' => $evaluations->where('status', 'Evaluated')->max('totaleffective') ?? 0,
+            'pending' => $evaluations->where('status', 'To Evaluate')->count(),
+            'overdue' => $evaluations->where('status', 'Overdue')->count(),
+        ];
+
         $this->logAudit('VIEW', 'Evaluation List Page (Evaluator)', 'User accessed evaluation list page (Evaluator)');
 
-        return view('evaluations.evaluator_index', compact('evaluations'));
+        return view('evaluations.evaluator_index', compact('evaluations', 'evalStats'));
     }
 
     public function createMaster()

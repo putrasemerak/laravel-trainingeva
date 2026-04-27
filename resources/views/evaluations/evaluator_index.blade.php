@@ -5,9 +5,77 @@
 @section('content')
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">My Evaluation Tasks</h1>
+    <span class="badge badge-light border p-2">{{ date('l, d F Y') }}</span>
 </div>
 
-<div class="card shadow mb-4">
+<!-- Summary Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card border-left-success shadow h-100 py-2 main-card">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Evaluations Done</div>
+                        <div class="h5 mb-0 font-weight-bold">{{ $evalStats['total_done'] }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-check-all fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card border-left-primary shadow h-100 py-2 main-card">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Highest Mark Given</div>
+                        <div class="h5 mb-0 font-weight-bold">{{ number_format($evalStats['highest_mark'], 2) }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-star-fill fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card border-left-warning shadow h-100 py-2 main-card">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Pending Tasks</div>
+                        <div class="h5 mb-0 font-weight-bold">{{ $evalStats['pending'] }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-clock-history fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card border-left-danger shadow h-100 py-2 main-card">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Overdue</div>
+                        <div class="h5 mb-0 font-weight-bold">{{ $evalStats['overdue'] }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-exclamation-triangle fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow mb-4 main-card">
     <div class="card-header py-3">
         <ul class="nav nav-tabs card-header-tabs" id="evaluatorTabs" role="tablist">
             @php $tabs = ['To Evaluate', 'Evaluated', 'Overdue']; @endphp
