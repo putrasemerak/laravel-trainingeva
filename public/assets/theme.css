@@ -33,53 +33,41 @@
     --close-color: #000;
 }
 
-/* ---------- Dark Theme (Professional Oceanic Slate) ---------- */
+/* ---------- Dark Theme (Deep Jewel & Muted Pastels) ---------- */
 [data-theme="dark"] {
-    --bg-body: #0f172a;      /* Deep Slate Blue */
-    --bg-card: #1e293b;      /* Lighter Slate card */
-    --bg-navbar: #020617;    /* Near-black Navbar */
-    --bg-greeting: #1e293b;  /* Elevated slate for greeting */
-    --accent-greeting: #3b82f6;
-    --text-body: #f1f5f9;    /* Clean white-grey text */
-    --text-muted: #94a3b8;   /* Cool muted text */
-    --border-color: #334155;  /* Defined slate border */
-    --table-stripe: rgba(255,255,255,.03);
-    --table-hover: rgba(255,255,255,.07);
-    --input-bg: #0f172a;     /* Inset input look */
-    --input-border: #475569;
-    --input-text: #f1f5f9;
-    --chart-bg: #1e293b;
-    --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
-    --card-header-bg: #1e293b;
-    --dropdown-bg: #1e293b;
-    --dropdown-text: #f1f5f9;
-    --close-color: #f1f5f9;
+    --bg-body: #0a0c12;      /* Deep Midnight Obsidian */
+    --bg-card: #151921;      /* Deep Sapphire-tinted Slate */
+    --bg-navbar: #05070a;    /* Pure Black-Jewel base */
+    --bg-greeting: #151921;
+    --accent-greeting: #a78bfa; /* Muted Pastel Lavender */
+    --text-body: #e2e8f0;    /* Soft Pearl White */
+    --text-muted: #94a3b8;   /* Cool Slate Muted */
+    --border-color: #1e293b;  /* Subtle Jewel Border */
+    --table-stripe: rgba(167, 139, 250, 0.03); /* Lavender-tinted stripe */
+    --table-hover: rgba(167, 139, 250, 0.08);
+    --input-bg: #0a0c12;
+    --input-border: #334155;
+    --input-text: #e2e8f0;
+    --chart-bg: #151921;
+    --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.7);
+    --card-header-bg: #1c232e;
+    --dropdown-bg: #151921;
+    --dropdown-text: #e2e8f0;
+    --close-color: #e2e8f0;
 }
 
-/* ---------- Superuser Theme Override (Purple & Gold) ---------- */
-[data-role="superuser"][data-theme="light"] {
-    --bg-body: #fdfbff;
-    --bg-card: #ffffff;
-    --bg-navbar: #4b2c71; /* Deep Purple */
-    --bg-greeting: #2d1a44;
-    --accent-greeting: #ffcc00; /* Gold accent */
-    --text-body: #2d1a44;
-    --border-color: #e2d9eb;
-    --shadow: 0 4px 12px rgba(75, 44, 113, 0.12);
-    --card-header-bg: #f8f4fc;
-}
-
+/* ---------- Superuser Theme Override (Deep Amethyst & Muted Gold) ---------- */
 [data-role="superuser"][data-theme="dark"] {
-    --bg-body: #1a0f26; /* Very Dark Purple */
-    --bg-card: #2d1a44;
-    --bg-navbar: #120a1a;
-    --bg-greeting: #2d1a44;
-    --accent-greeting: #ffcc00;
-    --text-body: #f3e8ff;
-    --border-color: #4b2c71;
-    --shadow: 0 4px 20px rgba(0,0,0,0.5);
-    --card-header-bg: #3a2258;
-    --input-bg: #3a2258;
+    --bg-body: #0f0a1a;      /* Deepest Amethyst Shadow */
+    --bg-card: #1a1129;      /* Dark Jewel Amethyst */
+    --bg-navbar: #0a0612;
+    --bg-greeting: #1a1129;
+    --accent-greeting: #fde047; /* Muted Pastel Gold */
+    --text-body: #f5f3ff;
+    --border-color: #3b2166;  /* Glowing Amethyst Border */
+    --shadow: 0 4px 25px rgba(0,0,0,0.8);
+    --card-header-bg: #261742;
+    --input-bg: #0f0a1a;
 }
 
 /* Superuser Navbar Accents */
@@ -137,8 +125,39 @@ hr { border-top-color: var(--border-color); margin-top: .5rem; margin-bottom: .5
 
 /* --- Table / Grid Consistency --- */
 .table td, .table th { 
-    padding: .3rem .5rem !important; 
+    padding: .2rem .4rem !important;      /* Tighter padding to prevent clipping */
     vertical-align: middle !important;
+    border-color: #cbd5e0 !important; 
+    font-family: var(--font-condensed) !important;
+    white-space: nowrap;                  /* Preferred, but allow override */
+    letter-spacing: -0.01em !important;
+}
+
+/* Specific columns that SHOULD wrap to save space */
+.table td.allow-wrap, .table th.allow-wrap {
+    white-space: normal !important;
+    min-width: 150px;
+    max-width: 300px;
+}
+
+/* Ensure horizontal scroll is available for all data tables */
+.table-responsive {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+}
+.table-bordered {
+    border-color: #cbd5e0 !important;
+}
+
+[data-theme="dark"] .table td, 
+[data-theme="dark"] .table th {
+    border-color: #2d3748 !important; /* Deep Slate for dark mode */
+}
+
+[data-theme="dark"] .table-bordered {
+    border-color: #2d3748 !important;
 }
 .thead-dark th {
     background-color: var(--bg-navbar) !important;
@@ -150,8 +169,24 @@ hr { border-top-color: var(--border-color); margin-top: .5rem; margin-bottom: .5
     padding: .2rem .6rem !important; 
     border-radius: 4px !important;
     height: auto !important;
+    transition: all 0.3s ease !important;
 }
 .btn-sm { padding: .1rem .4rem !important; }
+
+/* Global Button Hover Glow (Removes default "dimming" effect) */
+.btn:hover {
+    opacity: 1 !important;
+    filter: brightness(1.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+/* Specific glows for primary types */
+.btn-primary:hover { box-shadow: 0 0 15px rgba(0, 123, 255, 0.6) !important; }
+.btn-success:hover { box-shadow: 0 0 15px rgba(40, 167, 69, 0.6) !important; }
+.btn-danger:hover  { box-shadow: 0 0 15px rgba(220, 53, 69, 0.6) !important; }
+.btn-warning:hover { box-shadow: 0 0 15px rgba(255, 193, 7, 0.6) !important; }
+.btn-info:hover    { box-shadow: 0 0 15px rgba(23, 162, 184, 0.6) !important; }
 
 /* --- Form Uniformity --- */
 .form-control, .form-control-sm, .custom-select, .input-group-text { 
@@ -204,12 +239,28 @@ hr { border-top-color: var(--border-color); margin-top: .5rem; margin-bottom: .5
 }
 
 [data-theme="dark"] .card {
-    background-color: var(--bg-card) !important;
+    background-color: var(--bg-card);
     border-color: var(--border-color) !important;
 }
+[data-theme="dark"] .card.bg-danger { background-color: #dc3545 !important; }
+[data-theme="dark"] .card.bg-success { background-color: #28a745 !important; }
+[data-theme="dark"] .card.bg-primary { background-color: #007bff !important; }
+[data-theme="dark"] .card.bg-warning { background-color: #ffc107 !important; }
+[data-theme="dark"] .card.bg-info { background-color: #17a2b8 !important; }
+
 [data-theme="dark"] .table {
     color: var(--text-body) !important;
     background-color: var(--bg-card) !important;
+}
+
+/* Navbar Glow Effect (Dark Mode) */
+[data-theme="dark"] .navbar-nav .nav-link {
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+[data-theme="dark"] .navbar-nav .nav-link:hover {
+    color: #ff9f43 !important; /* Vibrant Orange */
+    text-shadow: 0 0 10px rgba(255, 159, 67, 0.8), 0 0 20px rgba(255, 159, 67, 0.4);
 }
 
 /* --- Compact Form Logic --- */
@@ -220,6 +271,16 @@ hr { border-top-color: var(--border-color); margin-top: .5rem; margin-bottom: .5
     padding-bottom: 2px; 
     margin-bottom: 10px; 
     margin-top: 10px; 
+}
+
+#local-fields {
+    background-color: var(--card-header-bg) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-body) !important;
+}
+
+#local-fields label {
+    color: var(--text-body) !important;
 }
 
 /* DataTables specifics */
@@ -240,6 +301,29 @@ div.dataTables_wrapper div.dataTables_length label {
     align-items: center !important;
     white-space: nowrap !important;
     margin-bottom: 0.5rem !important;
+}
+
+/* --- Dropdown Enhancements --- */
+.dropdown-item:hover {
+    background-color: #ffcc00 !important; /* High contrast Amber/Yellow */
+    color: #000000 !important;           /* Black text for maximum readability */
+    font-weight: 700 !important;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    background-color: #f59e0b !important; /* Deeper Amber for active state */
+    color: #000000 !important;
+    font-weight: 700 !important;
+}
+
+[data-theme="dark"] .dropdown-menu {
+    border: 1px solid var(--border-color) !important;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5) !important;
+}
+
+/* Ensure icons inside dropdowns also turn black on hover */
+.dropdown-item:hover i, .dropdown-item:hover span {
+    color: #000000 !important;
 }
 
 /* ================================================

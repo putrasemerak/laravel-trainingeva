@@ -50,17 +50,38 @@ class SystemController extends Controller
     {
         $request->validate([
             'emp_no' => 'required|string',
-            'role' => 'required|in:superuser,admin,evaluator,user'
+            'role' => 'required|in:superuser,admin,evaluator,user',
+            'name' => 'nullable|string',
+            'email' => 'nullable|email',
+            'register_local' => 'nullable|boolean'
         ]);
 
-        $userRole = UserRole::updateOrCreate(
+        // If explicitly requested to register locally OR if details are provided for a new local user
+        if ($request->register_local || ($request->name && $request->email)) {
+            \App\Models\Employee::updateOrCreate(
+                ['emp_no' => $request->emp_no],
+                [
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'is_active' => true,
+                    // Default values for local creation
+                    'division_code' => 'LOCAL',
+                    'department_code' => 'LOCAL',
+                ]
+            );
+            $msg = "Registered local user and assigned role.";
+        } else {
+            $msg = "User role updated successfully.";
+        }
+
+        UserRole::updateOrCreate(
             ['emp_no' => $request->emp_no],
             ['role' => $request->role]
         );
 
         $this->logAudit('UPDATE', 'System Settings', "Updated role for {$request->emp_no} to {$request->role}");
 
-        return redirect()->back()->with('success', 'User role updated successfully.');
+        return redirect()->back()->with('success', $msg);
     }
 
     public function updateSetting(Request $request)

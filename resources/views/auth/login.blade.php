@@ -24,31 +24,49 @@
         /* --- Card --- */
         .login-card {
             width: 100%;
-            max-width: 370px;
+            max-width: 420px;
             background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 1.5rem 1.6rem 1.2rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2.2rem 2.4rem 1.8rem;
             box-shadow: var(--shadow);
+            animation: pulsate-amber 3s infinite ease-in-out;
+        }
+
+        @keyframes pulsate-amber {
+            0% {
+                box-shadow: 0 0 8px rgba(255, 159, 67, 0.3);
+                border-color: rgba(255, 159, 67, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(255, 159, 67, 0.7);
+                border-color: rgba(255, 159, 67, 0.8);
+            }
+            100% {
+                box-shadow: 0 0 8px rgba(255, 159, 67, 0.3);
+                border-color: rgba(255, 159, 67, 0.3);
+            }
         }
 
         /* --- Brand --- */
         .login-brand {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            margin-bottom: 12px;
+            gap: 12px;
+            margin-bottom: 20px;
         }
         .login-brand img {
-            height: 2.2em;
+            height: 65px;
             width: auto;
         }
         .login-brand-name {
-            font-size: 15px;
+            font-size: 20px !important;
             font-weight: 800;
             color: var(--text-body);
-            white-space: nowrap;
+            letter-spacing: 0.5px;
+            text-align: center;
         }
 
         /* --- Title area --- */
@@ -93,11 +111,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             margin-bottom: 15px;
             margin-top: 10px;
             user-select: none;
         }
+        .theme-switch-row i { font-size: 12px; }
         .tg-icon-sun { color: #e6a817; }
         .tg-icon-moon { color: #e67e22; }
         
@@ -105,9 +124,9 @@
             display: flex;
             align-items: center;
             position: relative;
-            width: 110px;
-            height: 28px;
-            border-radius: 8px;
+            width: 90px;
+            height: 22px;
+            border-radius: 6px;
             cursor: pointer;
             overflow: hidden;
             border: 1px solid var(--border-color);
@@ -120,7 +139,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 10px;
+            font-size: 8px;
             font-weight: 700;
             z-index: 1;
             position: relative;
@@ -133,7 +152,7 @@
             left: 2px;
             width: calc(50% - 2px);
             height: calc(100% - 4px);
-            border-radius: 6px;
+            border-radius: 4px;
             background: #5b9bd5;
             transition: transform .3s ease, background .3s;
             z-index: 0;
@@ -149,16 +168,21 @@
         .btn-login-main {
             width: 100%;
             padding: 10px;
-            font-size: 14px;
+            font-size: 14px !important;
             font-weight: 700;
             border-radius: 8px;
             border: 1.5px solid #1565C0;
             background: #025ca7;
             color: #ffffff;
             cursor: pointer;
-            transition: opacity .2s;
+            transition: all .3s ease;
         }
-        .btn-login-main:hover { opacity: .8; color: #fff; }
+        .btn-login-main:hover { 
+            background: #0d6efd;
+            box-shadow: 0 0 15px rgba(13, 110, 253, 0.6);
+            color: #fff;
+            transform: translateY(-1px);
+        }
 
         .cred-hint {
             font-size: 11px;
@@ -170,10 +194,12 @@
         .login-footer {
             text-align: center;
             margin-top: 20px;
-            font-size: 10px;
+            font-size: 8px !important;
             color: var(--text-muted);
-            line-height: 1.6;
-            opacity: .7;
+            line-height: 1.4;
+        }
+        [data-theme="dark"] .login-footer {
+            color: #ffffff !important;
         }
     </style>
 </head>

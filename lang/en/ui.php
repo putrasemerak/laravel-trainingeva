@@ -23,4 +23,9 @@ return [
     'topic' => 'Topic',
     'date_issued' => 'Date Issued',
     'request_evaluation' => 'Request Evaluation',
+    'training' => 'Training',
+    'training_entry' => 'Attendance Entry',
+    'training_notifications' => 'Training Notifications',
+    'evaluation_form' => 'Evaluation Form',
+    'evaluate_subordinate' => 'Evaluate Subordinate',
 ];

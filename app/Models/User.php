@@ -188,6 +188,25 @@ class User extends Authenticatable
     }
 
     /**
+     * Check if user has a specific access level for a legacy program
+     */
+    public function hasLegacyAccess($progId, $allowedLevels = [])
+    {
+        if ($this->isSuperUser()) {
+            return true;
+        }
+
+        if (is_string($allowedLevels)) {
+            $allowedLevels = [$allowedLevels];
+        }
+
+        return ProgramPermission::where('EmpNo', $this->EmpNo)
+            ->where('ProgID', $progId)
+            ->whereIn('ALevel', $allowedLevels)
+            ->exists();
+    }
+
+    /**
      * Prevent any updates to the legacy user table.
      *
      * @param  array  $options

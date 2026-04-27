@@ -32,22 +32,21 @@
                                 <th>Ref No</th>
                                 <th>Participant Name</th>
                                 <th>Emp No</th>
-                                <th>Topic</th>
+                                <th class="allow-wrap">Topic</th>
                                 <th>Training Date</th>
                                 <th>Due Date</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
-                        </thead>
-                        <tbody>
+                            </thead>
+                            <tbody>
                             @foreach($evaluations->where('status', $tab) as $evaluation)
                             <tr>
                                 <td class="font-weight-bold">{{ $evaluation->refnum }}</td>
                                 <td>{{ $evaluation->fullname }}</td>
                                 <td>{{ $evaluation->empno }}</td>
-                                <td class="small">{{ $evaluation->topic }}</td>
-                                <td>{{ $evaluation->entryin }}</td>
-                                <td class="{{ $tab == 'Overdue' ? 'text-danger font-weight-bold' : '' }}">
+                                <td class="allow-wrap">{{ $evaluation->topic }}</td>
+                                <td>{{ $evaluation->entryin }}</td>                                <td class="{{ $tab == 'Overdue' ? 'text-danger font-weight-bold' : '' }}">
                                     {{ $evaluation->duedate }}
                                 </td>
                                 <td>

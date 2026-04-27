@@ -14,17 +14,8 @@
     <style>
         .navbar-brand img { height: 26px; width: auto; }
         .nav-link { font-weight: 600; }
-        
-        /* Matching the sliding toggle in navbar */
         .nav-theme-toggle {
-            display: flex;
-            align-items: center;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 20px;
-            padding: 2px 8px;
-            gap: 5px;
-            cursor: pointer;
+            display: flex; align-items: center; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 2px 8px; gap: 5px; cursor: pointer;
         }
         [data-theme="dark"] .nav-theme-toggle { background: rgba(0,0,0,0.2); }
     </style>
@@ -53,7 +44,7 @@
     </div>
 </div>
 
-<!-- Main Navigation (Matches AIN Navbar Style) -->
+<!-- Main Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm">
     <div class="container-fluid">
         <a class="navbar-brand d-flex align-items-center" href="{{ url('/dashboard') }}">
@@ -65,38 +56,49 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
-                @if(auth()->user()->hasPermission('dashboard'))
-                    <li class="nav-item">
-                        <a class="nav-link {{ Route::is('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">{{ __('ui.admin_dashboard') }}</a>
-                    </li>
-                @endif
-
                 <li class="nav-item">
-                    <a class="nav-link {{ Route::is('user.dashboard') ? 'active' : '' }}" href="{{ route('user.dashboard') }}">{{ __('ui.my_dashboard') }}</a>
+                    <a class="nav-link {{ Route::is('dashboard') || Route::is('user.dashboard') ? 'active' : '' }}" href="{{ url('/dashboard') }}">
+                        <i class="bi bi-speedometer2"></i> {{ __('ui.dashboard') }}
+                    </a>
                 </li>
 
-                @if(auth()->user()->hasPermission('evaluation_list'))
-                    <li class="nav-item">
-                        <a class="nav-link {{ Route::is('evaluations') ? 'active' : '' }}" href="{{ route('evaluations') }}">{{ __('ui.evaluations') }}</a>
-                    </li>
+                @if(auth()->user()->isSuperUser() || auth()->user()->hasLegacyAccess('HG10', ['01','02','03']))
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {{ Request::is('training/*') || Route::is('evaluations') ? 'active' : '' }}" href="#" id="trainingDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="bi bi-book"></i> {{ __('ui.training') }}
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow border-0" aria-labelledby="trainingDropdown" style="background-color: var(--bg-card) !important;">
+                        <a class="dropdown-item py-2 {{ Route::is('training.attendance') ? 'active' : '' }}" href="{{ route('training.attendance') }}" style="color: var(--text-body) !important;">
+                            <i class="bi bi-person-plus mr-2"></i> {{ __('ui.training_entry') }}
+                        </a>
+                        <a class="dropdown-item py-2 {{ Route::is('training.master_form') ? 'active' : '' }}" href="{{ route('training.master_form') }}" style="color: var(--text-body) !important;">
+                            <i class="bi bi-file-earmark-medical mr-2"></i> {{ __('ui.evaluation_form') }}
+                        </a>
+                        <div class="dropdown-divider" style="border-top-color: var(--border-color) !important;"></div>
+                        <a class="dropdown-item py-2 {{ Route::is('training.notifications') ? 'active' : '' }}" href="{{ route('training.notifications') }}" style="color: var(--text-body) !important;">
+                            <i class="bi bi-bell mr-2"></i> {{ __('ui.training_notifications') }}
+                        </a>
+                        <a class="dropdown-item py-2 {{ Route::is('evaluations.list') ? 'active' : '' }}" href="{{ route('evaluations.list') }}" style="color: var(--text-body) !important;">
+                            <i class="bi bi-list-check mr-2"></i> All Evaluations
+                        </a>
+                    </div>
+                </li>
                 @endif
 
-                @if(auth()->user()->hasPermission('evaluation_request'))
-                    <li class="nav-item">
-                        <a class="nav-link {{ Route::is('user.evaluations.create') ? 'active' : '' }}" href="{{ route('user.evaluations.create') }}"><i class="bi bi-plus-circle"></i> {{ __('ui.request_evaluation') }}</a>
-                    </li>
-                @endif
-
-                @if(auth()->user()->hasPermission('audit_trail'))
-                    <li class="nav-item">
-                        <a class="nav-link {{ Route::is('admin.audit') ? 'active' : '' }}" href="{{ route('admin.audit') }}">{{ __('ui.audit_trail') }}</a>
-                    </li>
-                @endif
-
-                @if(auth()->user()->hasPermission('system_settings'))
-                    <li class="nav-item">
-                        <a class="nav-link {{ Route::is('admin.settings') ? 'active' : '' }}" href="{{ route('admin.settings') }}"><i class="bi bi-gear"></i> {{ __('ui.system_settings') }}</a>
-                    </li>
+                @if(auth()->user()->isSuperUser())
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {{ Request::is('admin/*') ? 'active' : '' }}" href="#" id="adminDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="bi bi-shield-lock"></i> Admin
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow border-0" aria-labelledby="adminDropdown" style="background-color: var(--bg-card) !important;">
+                        <a class="dropdown-item py-2 {{ Route::is('admin.audit') ? 'active' : '' }}" href="{{ route('admin.audit') }}" style="color: var(--text-body) !important;">
+                            <i class="bi bi-receipt mr-2"></i> {{ __('ui.audit_trail') }}
+                        </a>
+                        <a class="dropdown-item py-2 {{ Route::is('admin.settings') ? 'active' : '' }}" href="{{ route('admin.settings') }}" style="color: var(--text-body) !important;">
+                            <i class="bi bi-gear mr-2"></i> {{ __('ui.system_settings') }}
+                        </a>
+                    </div>
+                </li>
                 @endif
 
                 <li class="nav-item ml-lg-3">
@@ -121,9 +123,8 @@
 <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap4.min.js"></script>
 
 <script>
-    // React to theme changes (optional but good for specific chart colors etc)
     window.addEventListener('themeChanged', function(e) {
-        // console.log('Theme is now: ' + e.detail.theme);
+        // Handle theme change if needed
     });
 </script>
 

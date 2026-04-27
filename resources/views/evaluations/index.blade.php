@@ -3,16 +3,12 @@
 @section('title', 'Admin Dashboard - Training Effectiveness Evaluation')
 
 @section('content')
-<!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">{{ __('ui.admin_dashboard') }}</h1>
     <div>
         <button type="button" id="btn-export-main" class="btn btn-sm btn-success shadow-sm mr-2" disabled>
             <i class="bi bi-download"></i> Export Selected
         </button>
-        <a href="{{ route('evaluations.create') }}" class="btn btn-sm btn-primary shadow-sm">
-            <i class="bi bi-plus-lg"></i> {{ __('ui.create_new') }}
-        </a>
     </div>
 </div>
 
@@ -75,7 +71,7 @@
                                     <th>Ref No</th>
                                     <th>Employee No</th>
                                     <th>Name</th>
-                                    <th>Topic</th>
+                                    <th class="allow-wrap">Topic</th>
                                     <th>Training Date</th>
                                     <th>Result</th>
                                     <th>Evaluation Date</th>
@@ -90,7 +86,7 @@
                                     <td class="font-weight-bold">{{ $eval->refnum }}</td>
                                     <td>{{ $eval->empno }}</td>
                                     <td>{{ $eval->fullname }}</td>
-                                    <td class="small">{{ $eval->topic }}</td>
+                                    <td class="allow-wrap">{{ $eval->topic }}</td>
                                     <td>{{ $eval->entryin }}</td>
                                     <td>
                                         <span class="text-{{ $eval->tresult == 'Passed' ? 'success' : ($eval->tresult == 'Failed' ? 'danger' : 'dark') }}">

@@ -7,6 +7,7 @@ use App\Models\Evaluation;
 use App\Models\AuditTrail;
 use App\Mail\EvaluationNotification;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,14 +15,53 @@ class EvaluationController extends Controller
 {
     public function index(Request $request)
     {
-        // Auto-update Overdue status
+        // 1. Training Stats from HR_0026 (MSSQL)
+        $totalTrainingsYear = \App\Models\LegacyTraining::whereYear('TSDate', date('Y'))->count();
+        // Check if Status column exists for OPEN trainings, otherwise default to a safe count
+        try {
+            $upcomingTrainings = \App\Models\LegacyTraining::where('Status', 'OPEN')->count();
+        } catch (\Exception $e) {
+            $upcomingTrainings = 0;
+        }
+
+        // 2. Evaluation Stats from TE_0001 (MySQL)
+        $evaluations = Evaluation::all();
+        $pendingEvaluations = $evaluations->where('status', '!=', 'Evaluated')->count();
+        $completedEvaluations = $evaluations->where('status', 'Evaluated')->count();
+        $avgEffectiveness = $evaluations->where('status', 'Evaluated')->avg('totaleffective') ?? 0;
+        $overdueCount = $evaluations->where('status', 'Overdue')->count();
+
+        $statusBreakdown = DB::table('te_0001')
+            ->select('status', DB::raw('count(*) as count'))
+            ->groupBy('status')
+            ->get();
+
+        $stats = [
+            'total_trainings_year' => $totalTrainingsYear,
+            'upcoming_trainings' => $upcomingTrainings,
+            'pending_evaluations' => $pendingEvaluations,
+            'completed_evaluations' => $completedEvaluations,
+            'total_evaluations' => $evaluations->count(),
+            'avg_effectiveness' => $avgEffectiveness,
+            'overdue_count' => $overdueCount,
+            'status_breakdown' => $statusBreakdown
+        ];
+
+        $this->logAudit('VIEW', 'Admin Lite Dashboard', 'User viewed system summary overview');
+
+        return view('admin.lite_dashboard', compact('stats'));
+    }
+
+    public function listAll(Request $request)
+    {
+        // Original list view logic moved here
         Evaluation::where('status', '!=', 'Evaluated')
             ->where('duedate', '<', Carbon::now()->format('Y-m-d'))
             ->update(['status' => 'Overdue']);
 
         $evaluations = Evaluation::all();
         
-        $this->logAudit('VIEW', 'Evaluation List Page (Admin)', 'User accessed evaluation list page');
+        $this->logAudit('VIEW', 'Evaluation List Page (Admin)', 'User accessed full evaluation list page');
 
         return view('evaluations.index', compact('evaluations'));
     }
@@ -43,71 +83,10 @@ class EvaluationController extends Controller
         return view('evaluations.evaluator_index', compact('evaluations'));
     }
 
-    public function createByUser()
+    public function createMaster()
     {
-        return view('user.create_evaluation');
-    }
-
-    public function storeFromUser(Request $request)
-    {
-        $data = $request->validate([
-            'empno' => 'required|string',
-            'fullname' => 'required|string',
-            'div' => 'required|string',
-            'dept' => 'required|string',
-            'sec' => 'nullable|string',
-            'subsec' => 'nullable|string',
-            'unit' => 'nullable|string',
-            'topic' => 'required|string',
-            'entryin' => 'required|date',
-            'entryout' => 'required|date',
-            'tduration' => 'required|string',
-            'eemp' => 'required|string',
-            'ename' => 'required|string',
-            'eemail' => 'required|email',
-        ]);
-
-        // Generate RefNum
-        $lastId = Evaluation::max('teid') ?? 0;
-        $refnum = 'TEE' . date('y') . ($lastId + 1);
-
-        $evaluation = new Evaluation();
-        $evaluation->refnum = $refnum;
-        $evaluation->empno = $data['empno'];
-        $evaluation->fullname = $data['fullname'];
-        $evaluation->div = $data['div'];
-        $evaluation->dept = $data['dept'];
-        $evaluation->sec = $data['sec'] ?? '';
-        $evaluation->subsec = $data['subsec'] ?? '';
-        $evaluation->unit = $data['unit'] ?? '';
-        $evaluation->topic = $data['topic'];
-        $evaluation->entryin = $data['entryin'];
-        $evaluation->entryout = $data['entryout'];
-        $evaluation->tduration = $data['tduration'];
-        $evaluation->eemp = $data['eemp'];
-        $evaluation->ename = $data['ename'];
-        $evaluation->eemail = $data['eemail'];
-        
-        $evaluation->status = 'To Evaluate';
-        $evaluation->dtissued = Carbon::now()->format('Y-m-d');
-        $evaluation->duedate = Carbon::parse($data['entryout'])->addMonths(6)->format('Y-m-d');
-        $evaluation->tcategory = 'Internal'; 
-        $evaluation->radiocom = 'On the job observation';
-        $evaluation->save();
-
-        if ($evaluation->status === 'To Evaluate') {
-            $this->sendEvaluatorEmail($evaluation);
-        }
-
-        $this->logAudit('INSERT', 'User Self-Evaluation', "User {$data['empno']} submitted evaluation request: $refnum");
-
-        return redirect()->back()->with('success', "Evaluation $refnum submitted successfully to {$data['ename']}.");
-    }
-
-    public function create()
-    {
-        $this->logAudit('VIEW', 'Create Evaluation Page', 'User accessed create evaluation page');
-        return view('evaluations.create');
+        $this->logAudit('VIEW', 'Master Evaluation Form', 'User accessed full entry evaluation form');
+        return view('training.master_form');
     }
 
     public function store(Request $request)
@@ -175,6 +154,12 @@ class EvaluationController extends Controller
         $this->logAudit('VIEW', 'Evaluation View', "User viewed record: {$evaluation->refnum}");
 
         return view('evaluations.show', compact('evaluation'));
+    }
+
+    public function showApi($id)
+    {
+        $evaluation = Evaluation::findOrFail($id);
+        return response()->json($evaluation);
     }
 
     public function print($id)
@@ -272,6 +257,21 @@ class EvaluationController extends Controller
             'status' => $data['status'] ?? 'Evaluated',
             'dtevaluate' => Carbon::now()->format('Y-m-d'),
         ]);
+
+        // --- INTEGRATION: Sync to HR_0020 (MSSQL) ---
+        if ($evaluation->status === 'Evaluated') {
+            try {
+                \App\Models\TrainingRecord::where('EmpNo', $evaluation->empno)
+                    ->where('Title', $evaluation->topic)
+                    ->where('TDate', $evaluation->entryin)
+                    ->update([
+                        'Status' => 'Evaluated',
+                        // Add more fields if HR_0020 supports them (e.g. Effectiveness, EvaluatedDate)
+                    ]);
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error("Failed to sync to HR_0020 for {$evaluation->refnum}: " . $e->getMessage());
+            }
+        }
 
         // Trigger email if status changed to 'To Evaluate' during an update/edit
         if ($evaluation->status === 'To Evaluate' && $oldStatus !== 'To Evaluate') {

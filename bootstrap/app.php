@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'access' => \App\Http\Middleware\CheckAccessLevel::class,
             'role' => \App\Http\Middleware\RoleMiddleware::class,
             'permission' => \App\Http\Middleware\PermissionMiddleware::class,
+            'legacy_access' => \App\Http\Middleware\CheckLegacyAccess::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

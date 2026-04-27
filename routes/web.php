@@ -11,26 +11,44 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/lang/{locale}', [\App\Http\Controllers\LanguageController::class, 'switch'])->name('lang.switch');
 
 Route::middleware(['auth'])->group(function () {
-    // Dashboard Dispatcher
+    // Dashboard Dispatcher (Seamless Traffic Controller)
     Route::get('/dashboard', function() {
-        if (auth()->user()->hasPermission('dashboard')) {
+        $user = auth()->user();
+        
+        // 1. HR Admin / Superadmin -> Lite Summary Dashboard
+        if ($user->isSuperUser() || $user->hasLegacyAccess('HG10', ['01','02','03'])) {
             return app(App\Http\Controllers\EvaluationController::class)->index(request());
         }
+        
+        // 2. Evaluator (Superior) -> Task List
+        $hasTasks = \App\Models\Evaluation::where('eemp', $user->EmpNo)->where('status', '!=', 'Evaluated')->exists();
+        if ($hasTasks) {
+            return redirect()->route('evaluations');
+        }
+        
+        // 3. Regular User -> Personal History
         return redirect()->route('user.dashboard');
     })->name('dashboard');
 
     Route::get('/my-dashboard', [App\Http\Controllers\UserDashboardController::class, 'index'])->name('user.dashboard');
-    
-    // Shared: Language Switching (Handled globally, but keep here for safety)
-    Route::get('/lang/{locale}', [\App\Http\Controllers\LanguageController::class, 'switch'])->name('lang.switch');
-    Route::get('/api/topics', [\App\Http\Controllers\EmployeeController::class, 'getTopics'])->name('api.topics.index');
-    Route::get('/api/employees/{empno}', [\App\Http\Controllers\EmployeeController::class, 'show'])->name('api.employees.show');
+    Route::get('/api/evaluations/{id}', [EvaluationController::class, 'showApi'])->name('api.evaluations.show');
+
+    // ... Shared ...
+
+    // Training Attendance (Legacy HG10)
+    Route::middleware(['legacy_access:HG10,02,03'])->group(function () {
+        Route::get('/training/attendance', [\App\Http\Controllers\TrainingAttendanceController::class, 'index'])->name('training.attendance');
+        Route::get('/training/notifications', [\App\Http\Controllers\TrainingAttendanceController::class, 'notifications'])->name('training.notifications');
+        Route::get('/training/evaluation-form', [EvaluationController::class, 'createMaster'])->name('training.master_form');
+        Route::get('/training/list', [EvaluationController::class, 'listAll'])->name('evaluations.list');
+        Route::get('/training/search', [\App\Http\Controllers\TrainingAttendanceController::class, 'searchTraining']);
+        Route::get('/employee/search', [\App\Http\Controllers\TrainingAttendanceController::class, 'searchEmployee']);
+        Route::get('/employee/details/{empno}', [\App\Http\Controllers\TrainingAttendanceController::class, 'getEmployeeDetails']);
+        Route::post('/training/attendance/store', [\App\Http\Controllers\TrainingAttendanceController::class, 'store']);
+    });
 
     // Role: Regular User + (Creation only)
-    Route::middleware(['permission:evaluation_request'])->group(function () {
-        Route::get('/user/evaluate/new', [EvaluationController::class, 'createByUser'])->name('user.evaluations.create');
-        Route::post('/user/evaluate', [EvaluationController::class, 'storeFromUser'])->name('user.evaluations.store');
-    });
+    // - Removed redundant manual request routes -
 
     // Role: Evaluator & Admin & SuperUser (Listings and individual evaluation)
     Route::middleware(['permission:evaluation_list'])->group(function () {
@@ -38,6 +56,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/evaluations/{id}/evaluate', [EvaluationController::class, 'evaluate'])->name('evaluations.evaluate');
         Route::put('/evaluations/{id}', [EvaluationController::class, 'update'])->name('evaluations.update');
         Route::get('/evaluations/{id}/print', [EvaluationController::class, 'print'])->name('evaluations.print');
+    });
+
+    // Admin User Management
+    Route::middleware(['permission:system_settings'])->group(function () {
+        Route::get('/admin/users/register', [\App\Http\Controllers\UserManagementController::class, 'create'])->name('admin.users.register');
+        Route::get('/admin/users/lookup/{empno}', [\App\Http\Controllers\UserManagementController::class, 'lookup'])->name('admin.users.lookup');
+        Route::post('/admin/users/register', [\App\Http\Controllers\UserManagementController::class, 'store'])->name('admin.users.store');
     });
 
     // Role: Admin & SuperUser (Management Dashboard)

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'login' => 'Login',
+    'login' => 'Log Masuk',
     'logout' => 'Log Keluar',
     'welcome' => 'Selamat Datang',
     'dashboard' => 'Papan Pemuka',
@@ -23,4 +23,9 @@ return [
     'topic' => 'Topik',
     'date_issued' => 'Tarikh Dikeluarkan',
     'request_evaluation' => 'Mohon Penilaian',
+    'training' => 'Latihan',
+    'training_entry' => 'Kemasukan Kehadiran',
+    'training_notifications' => 'Notifikasi Latihan',
+    'evaluation_form' => 'Borang Penilaian',
+    'evaluate_subordinate' => 'Nilai Bawahan',
 ];
