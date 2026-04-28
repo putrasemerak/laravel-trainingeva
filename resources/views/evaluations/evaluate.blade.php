@@ -22,9 +22,19 @@
             </div>
             
             <div class="card-body px-4 py-3">
+                @if($evaluation->status === 'Evaluated')
+                <div class="alert alert-success border d-flex align-items-center mb-4">
+                    <i class="bi bi-lock-fill h4 mb-0 mr-3"></i>
+                    <div>
+                        <strong>RECORD LOCKED:</strong> This evaluation was completed on <strong>{{ $evaluation->dtevaluate }}</strong>. 
+                        Data is now finalized and synced with AINData.
+                    </div>
+                </div>
+                @else
                 <div class="alert alert-light border small text-muted mb-4">
                     <i class="bi bi-info-circle"></i> To be filled by Immediate Superiors / Section Head / Department Head within 6 months.
                 </div>
+                @endif
 
                 <div class="form-compact">
                     <div class="section-title mt-0 text-uppercase" style="font-size: 0.75rem; letter-spacing: 0.5px;">Record Reference</div>
@@ -88,6 +98,7 @@
                                 ['name' => 'range5', 'label' => 'E. Improvement in Reduction Error & Rework'],
                                 ['name' => 'range6', 'label' => 'F. Improvement to Work Quality Output'],
                             ];
+                            $isLocked = $evaluation->status === 'Evaluated';
                         @endphp
 
                         @foreach($ratings as $rating)
@@ -95,8 +106,11 @@
                             <label class="col-sm-5 col-form-label small font-weight-bold">{{ $rating['label'] }}</label>
                             <div class="col-sm-7">
                                 <div class="d-flex align-items-center px-2">
-                                    <input type="range" class="custom-range rating-range flex-grow-1" min="0" max="10" step="1" name="{{ $rating['name'] }}" id="{{ $rating['name'] }}" value="0" list="tickmarks" style="cursor: pointer;">
-                                    <div class="range-value ml-3" id="{{ $rating['name'] }}_val">0</div>
+                                    <input type="range" class="custom-range rating-range flex-grow-1" min="0" max="10" step="1" name="{{ $rating['name'] }}" id="{{ $rating['name'] }}" 
+                                        value="{{ $evaluation->{$rating['name']} ?? 0 }}" 
+                                        {{ $isLocked ? 'disabled' : '' }}
+                                        list="tickmarks" style="cursor: {{ $isLocked ? 'default' : 'pointer' }};">
+                                    <div class="range-value ml-3" id="{{ $rating['name'] }}_val">{{ $evaluation->{$rating['name']} ?? 0 }}</div>
                                 </div>
                                 <div class="d-flex justify-content-between mt-1 text-muted font-weight-bold" style="font-size: 9px !important; padding-left: 14px; padding-right: 52px;">
                                     <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
@@ -124,7 +138,7 @@
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Comments</label>
                             <div class="col-sm-9">
-                                <textarea class="form-control form-control-sm" name="evaluator" rows="3" placeholder="Enter your observation or feedback here..."></textarea>
+                                <textarea class="form-control form-control-sm" name="evaluator" rows="3" {{ $isLocked ? 'disabled' : '' }} placeholder="Enter your observation or feedback here...">{{ $evaluation->evaluator }}</textarea>
                             </div>
                         </div>
 
@@ -132,8 +146,8 @@
                             <div class="row align-items-center">
                                 <div class="col-md-3 text-center border-right">
                                     <h6 class="small text-uppercase mb-1">Overall Rating</h6>
-                                    <div class="h3 font-weight-bold mb-0" id="totaleffective">0.00</div>
-                                    <input type="hidden" name="totaleffective" id="totaleffective_input" value="0">
+                                    <div class="h3 font-weight-bold mb-0" id="totaleffective">{{ $evaluation->totaleffective ?? '0.00' }}</div>
+                                    <input type="hidden" name="totaleffective" id="totaleffective_input" value="{{ $evaluation->totaleffective ?? 0 }}">
                                 </div>
                                 <div class="col-md-9 pl-4">
                                     <div class="alert mb-0 py-2 px-3 border" id="ratingAlert">
@@ -145,9 +159,15 @@
 
                         <div class="mt-4 text-center">
                             <hr>
-                            <button type="submit" class="btn btn-success px-5 py-2 font-weight-bold shadow-sm">
-                                <i class="bi bi-check-circle mr-1"></i> SUBMIT FINAL EVALUATION
-                            </button>
+                            @if(!$isLocked)
+                                <button type="submit" class="btn btn-success px-5 py-2 font-weight-bold shadow-sm">
+                                    <i class="bi bi-check-circle mr-1"></i> SUBMIT FINAL EVALUATION
+                                </button>
+                            @else
+                                <a href="{{ route('evaluations.print', $evaluation->teid) }}" target="_blank" class="btn btn-info px-5 py-2 font-weight-bold shadow-sm">
+                                    <i class="bi bi-printer mr-1"></i> PRINT EVALUATION
+                                </a>
+                            @endif
                             <a href="{{ route('evaluations') }}" class="btn btn-link btn-sm text-muted">Back to List</a>
                         </div>
                     </form>

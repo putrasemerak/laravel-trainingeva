@@ -113,8 +113,15 @@
     </div>
 </div>
 
-<div class="mt-4">
-    {{ $logs->appends(request()->query())->links() }}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 pb-5">
+    @if($logs->total() > 0)
+    <div class="text-muted mb-3 mb-md-0">
+        Showing {{ $logs->firstItem() }} to {{ $logs->lastItem() }} of {{ $logs->total() }} results
+    </div>
+    @endif
+    <div>
+        {{ $logs->appends(request()->query())->links() }}
+    </div>
 </div>
 @endsection
 

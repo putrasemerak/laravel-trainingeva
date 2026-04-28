@@ -238,6 +238,12 @@ class EvaluationController extends Controller
     public function update(Request $request, $id)
     {
         $evaluation = Evaluation::findOrFail($id);
+        
+        // Prevent editing if already Evaluated
+        if ($evaluation->status === 'Evaluated') {
+            return redirect()->route('evaluations')->with('error', 'This evaluation is locked and cannot be modified.');
+        }
+
         $oldStatus = $evaluation->status;
         $oldData = $evaluation->toArray();
 

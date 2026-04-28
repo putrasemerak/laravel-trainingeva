@@ -8,10 +8,25 @@
     <span class="badge badge-light border p-2">{{ date('l, d F Y') }}</span>
 </div>
 
+<style>
+    .card-shadow-amber {
+        box-shadow: 0 0.5rem 1.5rem rgba(255, 191, 0, 0.15) !important;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card-shadow-amber:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 1rem 2rem rgba(255, 191, 0, 0.25) !important;
+    }
+    [data-theme="dark"] .card-shadow-amber {
+        box-shadow: 0 0.5rem 2rem rgba(255, 191, 0, 0.1) !important;
+        border-color: rgba(255, 191, 0, 0.2) !important;
+    }
+</style>
+
 <!-- Summary Cards -->
 <div class="row mb-4">
     <div class="col-md-3">
-        <div class="card border-left-success shadow h-100 py-2 main-card">
+        <div class="card border-left-success shadow h-100 py-2 main-card card-shadow-amber">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
@@ -27,7 +42,7 @@
     </div>
 
     <div class="col-md-3">
-        <div class="card border-left-primary shadow h-100 py-2 main-card">
+        <div class="card border-left-primary shadow h-100 py-2 main-card card-shadow-amber">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
@@ -43,7 +58,7 @@
     </div>
 
     <div class="col-md-3">
-        <div class="card border-left-warning shadow h-100 py-2 main-card">
+        <div class="card border-left-warning shadow h-100 py-2 main-card card-shadow-amber">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
@@ -59,7 +74,7 @@
     </div>
 
     <div class="col-md-3">
-        <div class="card border-left-danger shadow h-100 py-2 main-card">
+        <div class="card border-left-danger shadow h-100 py-2 main-card card-shadow-amber">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
@@ -75,7 +90,7 @@
     </div>
 </div>
 
-<div class="card shadow mb-4 main-card">
+<div class="card shadow mb-4 main-card card-shadow-amber">
     <div class="card-header py-3">
         <ul class="nav nav-tabs card-header-tabs" id="evaluatorTabs" role="tablist">
             @php $tabs = ['To Evaluate', 'Evaluated', 'Overdue']; @endphp
